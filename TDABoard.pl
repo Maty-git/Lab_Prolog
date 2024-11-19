@@ -1,16 +1,19 @@
 % Constructor del tablero inicial
 board([[0,0,0,0,0,0,0],
-       [0,0,0,0,0,0,0],
-       [0,0,0,0,0,0,0],
-       [0,0,0,0,0,0,0],
-       [0,0,0,0,0,0,0],
-       [0,0,0,0,0,0,0]]).
+       [0,0,y,0,0,0,0],
+       [y,0,0,y,0,0,0],
+       [0,y,0,0,y,0,0],
+       [0,0,y,0,0,y,0],
+       [0,0,0,y,0,0,0]]).
 
+%------------------------------------------------------------
 % Verificar si se puede jugar (si hay algún espacio vacío)
 can_play(Tablero) :-
     member(Fila, Tablero),
     member(0, Fila).
 
+
+%------------------------------------------------------------
 % Función para colocar una ficha en la columna asignada
 play_piece(Board, Columna, Pieza, NuevoBoard) :-
     reverse(Board, RevBoard), % Invertimos el tablero para colocar la ficha desde la última posición hacia arriba
@@ -72,3 +75,39 @@ vertical_win([Head|Cola],Columna,Ficha,Contador,Winner):-
 	Nuevo_contador is Contador + 1,
 	vertical_win(Cola,Columna,Ficha,Nuevo_contador,Winner).
 
+%--------------------------------------------------------------
+check_horizontal_win(Board,Winner):-
+	horizontal_win_1(1,Board,1,r,Winner);
+	horizontal_win_1(1,Board,1,y,Winner);
+	horizontal_win_1(1,Board,1,0,Winner).
+	
+horizontal_win_1(_,_,_,Ficha,Ficha):-
+	Ficha = 0 .
+
+horizontal_win_1(Fila,Board,Columna,Ficha,Winner):-
+	Fila =< 6,
+	Columna =< 4,
+	horizontal_win(Fila,Board,Columna,Ficha,0,Winner).
+
+horizontal_win_1(Fila,Board,Columna,Ficha,Winner):-
+	Fila =< 6,
+	Columna =< 4,
+	ColumnaNueva is Columna + 1,
+	horizontal_win_1(Fila,Board,ColumnaNueva,Ficha,Winner).
+
+horizontal_win_1(Fila,[_|Cola],Columna,Ficha,Winner):-
+	Fila =< 6,
+	Columna = 5,
+	FilaNueva is Fila + 1,
+	horizontal_win_1(FilaNueva,Cola,1,Ficha,Winner).
+	
+
+horizontal_win(_,_,_,Ficha,Contador,Ficha):-
+	Contador = 4 .
+
+horizontal_win(Fila,[Head|Cola],Columna,Ficha,Contador,Winner):-
+	elemento_en_columna(Columna, Head, Ficha_espacio),
+	Ficha_espacio = Ficha,
+	ColumnaNueva is Columna + 1 ,
+	ContadorNuevo is Contador + 1 ,
+	horizontal_win(Fila,[Head|Cola],ColumnaNueva,Ficha,ContadorNuevo,Winner).
