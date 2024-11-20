@@ -1,10 +1,10 @@
 % Constructor del tablero inicial
 board([[0,0,0,0,0,0,0],
-       [0,0,y,0,0,0,0],
-       [y,0,0,y,0,0,0],
-       [0,y,0,0,y,0,0],
-       [0,0,y,0,0,y,0],
-       [0,0,0,y,0,0,0]]).
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0],
+       [0,0,0,0,0,0,0]]).
 
 %------------------------------------------------------------
 % Verificar si se puede jugar (si hay algún espacio vacío)
@@ -43,28 +43,28 @@ elemento_en_columna(N, [_|Tail], Elem) :-
 %--------------------------------------------
 check_vertical_win(Board, Winner) :-
     vertical_win_1(1, Board, 1, r, Winner);
-    vertical_win_1(1, Board, 1, y, Winner);
-	vertical_win_1(1, Board, 1, 0, Winner). % Si no hay ganador, devuelve 0
+    vertical_win_1(1, Board, 1, y, Winner).
+	%vertical_win_1(1, Board, 1, 0, Winner).
 
 vertical_win_1(_, _, _, Ficha, Ficha):-
 	Ficha = 0 .
 
 vertical_win_1(Fila, Board, Columna, Ficha, Winner) :-
-    Fila =< 3, 
+    Fila =< 3,
 	Columna < 8,
     vertical_win(Board, Columna, Ficha, 0, Winner).
-	
+
 vertical_win_1(Fila, Board, Columna, Ficha, Winner) :-
     Fila =< 3,
     Columna < 8, % Columnas válidas
     ColumnaNueva is Columna + 1,
     vertical_win_1(Fila, Board, ColumnaNueva, Ficha, Winner).
-	
+
 vertical_win_1(Fila, [_|Cola], Columna, Ficha, Winner) :-
     Columna = 8,
     FilaNueva is Fila + 1,
     vertical_win_1(FilaNueva, Cola, 1, Ficha, Winner).
-	
+
 
 vertical_win(_,_,Ficha,Contador,Ficha):-
 	Contador = 4 .
@@ -78,9 +78,9 @@ vertical_win([Head|Cola],Columna,Ficha,Contador,Winner):-
 %--------------------------------------------------------------
 check_horizontal_win(Board,Winner):-
 	horizontal_win_1(1,Board,1,r,Winner);
-	horizontal_win_1(1,Board,1,y,Winner);
-	horizontal_win_1(1,Board,1,0,Winner).
-	
+	horizontal_win_1(1,Board,1,y,Winner).
+	%horizontal_win_1(1,Board,1,0,Winner).
+
 horizontal_win_1(_,_,_,Ficha,Ficha):-
 	Ficha = 0 .
 
@@ -100,7 +100,7 @@ horizontal_win_1(Fila,[_|Cola],Columna,Ficha,Winner):-
 	Columna = 5,
 	FilaNueva is Fila + 1,
 	horizontal_win_1(FilaNueva,Cola,1,Ficha,Winner).
-	
+
 
 horizontal_win(_,_,_,Ficha,Contador,Ficha):-
 	Contador = 4 .
@@ -111,3 +111,72 @@ horizontal_win(Fila,[Head|Cola],Columna,Ficha,Contador,Winner):-
 	ColumnaNueva is Columna + 1 ,
 	ContadorNuevo is Contador + 1 ,
 	horizontal_win(Fila,[Head|Cola],ColumnaNueva,Ficha,ContadorNuevo,Winner).
+
+%-------------------------------------------------------------
+check_diagonal_win(Board,Winner):-
+	diagonal_win_1(1,Board,1,r,Winner);
+	diagonal_win_2(1,Board,7,r,Winner);
+	diagonal_win_1(1,Board,1,y,Winner);
+	diagonal_win_2(1,Board,7,y,Winner).
+	%diagonal_win_1(1,Board,1,0,Winner).
+
+diagonal_win_1(_,_,_,Ficha,Ficha):-
+	Ficha = 0 .
+
+diagonal_win_1(Fila,Board,Columna,Ficha,Winner):-
+	Fila =< 3 ,
+	Columna =< 4 ,
+	diagonal_win(Fila,Board,Columna,Ficha,0,Winner).
+
+diagonal_win_1(Fila,Board,Columna,Ficha,Winner):-
+	Fila =< 3 ,
+	Columna =< 4 ,
+	ColumnaNueva is Columna + 1 ,
+	diagonal_win_1(Fila,Board,ColumnaNueva,Ficha,Winner).
+
+diagonal_win_1(Fila,[_|Cola],Columna,Ficha,Winner):-
+	Fila < 4 ,
+	Columna = 5 ,
+	FilaNueva is Fila + 1 ,
+	diagonal_win_1(FilaNueva,Cola,1,Ficha,Winner).
+
+diagonal_win(_,_,_,Ficha,Contador,Ficha):-
+	Contador = 4.
+
+diagonal_win(Fila,[Head|Cola],Columna,Ficha,Contador,Winner):-
+	elemento_en_columna(Columna, Head, Ficha_espacio),
+	Ficha_espacio = Ficha,
+	ColumnaN is Columna + 1,
+	ContadorN is Contador + 1,
+	diagonal_win(Fila,Cola,ColumnaN,Ficha,ContadorN,Winner).
+
+
+diagonal_win_2(Fila,Board,Columna,Ficha,Winner):-
+	Fila =< 3 ,
+	Columna > 3 ,
+	diagonal_win3(Fila,Board,Columna,Ficha,0,Winner).
+
+diagonal_win_2(Fila,Board,Columna,Ficha,Winner):-
+	Fila =< 3 ,
+	Columna > 3 ,
+	ColumnaNueva is Columna - 1 ,
+	diagonal_win_2(Fila,Board,ColumnaNueva,Ficha,Winner).
+
+diagonal_win_2(Fila,[_|Cola],Columna,Ficha,Winner):-
+	Fila < 4 ,
+	Columna = 3 ,
+	FilaNueva is Fila + 1 ,
+	diagonal_win_2(FilaNueva,Cola,7,Ficha,Winner).
+
+diagonal_win3(_,_,_,Ficha,Contador,Ficha):-
+	Contador = 4.
+
+diagonal_win3(Fila,[Head|Cola],Columna,Ficha,Contador,Winner):-
+	elemento_en_columna(Columna, Head, Ficha_espacio),
+	Ficha_espacio = Ficha,
+	ColumnaN is Columna - 1,
+	ContadorN is Contador + 1,
+	diagonal_win3(Fila,Cola,ColumnaN,Ficha,ContadorN,Winner).
+
+
+
