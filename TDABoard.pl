@@ -178,5 +178,15 @@ diagonal_win3(Fila,[Head|Cola],Columna,Ficha,Contador,Winner):-
 	ContadorN is Contador + 1,
 	diagonal_win3(Fila,Cola,ColumnaN,Ficha,ContadorN,Winner).
 
+%-------------------------------------------------------------
+who_is_winner(Board,Winner):-
+	check_vertical_win(Board,Winner);
+	check_horizontal_win(Board,Winner);
+	check_diagonal_win(Board,Winner);
+	win(0,Winner).
+	
+win(Ficha,Ficha):-
+	Ficha = 0.
 
+%--------------------------------------------
 
