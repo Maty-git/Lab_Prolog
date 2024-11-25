@@ -47,5 +47,22 @@ update_stats([[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, 
 	Draws2N is Draws2 + 1.
 
 %------------------------------------------------------------
+get_current_player([Player1,_,_,Turnoactual,_],Player1):-
+	1 is Turnoactual mod 2.
+get_current_player([_,Player2,_,Turnoactual,_],Player2):-
+	0 is Turnoactual mod 2.
 
+
+%-------------------------------------------------------------
+game_get_board([_,_,Board,_,_],Board).
+
+%------------------------------------------------------------
+
+end_game([Player1,Player2,Board,Turnoactual,Historial],[P1,P2,Board,Turnoactual,Historial]):-
+	update_stats([Player1,Player2,Board,Turnoactual,Historial],
+				[Player1,Player2],
+				P1,P2),
+	write(P1),nl,
+	write(P2),nl.
+%--------------------------------------------------------------
 

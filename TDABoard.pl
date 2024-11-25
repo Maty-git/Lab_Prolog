@@ -189,3 +189,18 @@ win(Ficha,Ficha):-
 
 %--------------------------------------------
 
+imprimir_tablero([]).  % Caso base: si la lista está vacía, no hacemos nada
+
+imprimir_tablero([Fila|Resto_tablero]):-
+    imprimir_fila(Fila),
+    nl,
+    imprimir_tablero(Resto_tablero).
+
+imprimir_fila([]).  % Caso base: si la fila está vacía, no hacemos nada
+
+imprimir_fila([X|Resto_fila]):-
+    write(X),
+    write(' '),
+    imprimir_fila(Resto_fila).
+	
+	
