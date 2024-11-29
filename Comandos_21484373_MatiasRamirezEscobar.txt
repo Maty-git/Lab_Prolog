@@ -1,0 +1,39 @@
+INSTRUCCIONES:
+-Primeramente se deben crear los jugadores :
+player(Id, Name, Color, Win, Losses, Draws, Piezas, [Id, Name, Color, Win, Losses, Draws, Piezas]).
+ejemplo: player(1, "Juan", "red", 0, 0, 0, 10, P1),
+	player(2, "Mauricio", "yellow", 0, 0, 0, 10, P2),
+
+-Se crea un tablero vacio:
+board(EmptyBoard),
+
+-Para crear una nueva partida usted debe haber definido el color de las piezas, ambos jugadores y un tablero vacio:
+game(Player1, Player2, Tablero, Turno, JuegoNuevo),
+ejemplo: game(P1, P2, EmptyBoard, 1, G0),
+
+-Para poner una ficha en el tablero DE UNA PARTIDA debe:
+Siempre respetando el rango de 1 a 7 para las columnas ya que si no se respeta traera errores.
+player_play(JuegoActual, PlayerCorrespondiente, Columna, NuevoJuego),
+ejemplo: player_play(G0, P1, 1, G1),
+
+-Para mostrar el jugador siguiente al turno actual de la partida usted debe:
+get_current_player(JuegoActual,PlayerCorrespondiente)
+
+-Para verificar si una partida es empate:
+is_draw(JuegoActual)
+
+-Para mostrar el jugador cuyo turno le corresponde:
+(en caso de que ya termino el juego mostrará el jugador que hizo el ultimo movimiento
+que es el mismo que gano)
+get_current_player(JuegoActual,PlayerCorrespondiente)
+
+-Para obtener el tablero de la partida:
+game_get_board(JuegoActual,Board)
+.
+-Para obtener el historial DE UNA PARTIDA FINALIZADA:
+game_history(JuegoActual,Historial)
+ejemplo: game_history(G11, History),
+
+Se aclara que no es recomendable usar predicados modificadores ademas del predicado
+que crea una pieza, ya que por ejemplo end_game ya actua y actualiza las estadisticas 
+de los jugadores en caso de que gane o empaten si se usa por fuera puede traer errores.

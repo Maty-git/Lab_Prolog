@@ -1,16 +1,35 @@
 
+/* 
+Predicado: game/5
+Tipo: Constructor
+Dominio: Jugador1 X Jugador2 X Tablero X TurnoActual X Historial X Juego
+Recorrido: Juego
+Descripción: Construye el estado inicial del juego Conecta 4, definiendo jugadores, tablero, turno inicial y un historial vacío o existente de movimientos.
+*/
 
-%constructor game
 game(Player1,Player2,Board,Turnoactual,[Player1,Player2,Board,Turnoactual,[]]).
 game(Player1,Player2,Board,Turnoactual,Historial,[Player1,Player2,Board,Turnoactual,Historial]).
 
 %----------------------------------
+/* 
+Predicado: game_history/2
+Tipo: Consultor
+Dominio: Juego X Historial
+Recorrido: Historial
+Descripción: Obtiene el historial de movimientos realizados durante el juego en orden inverso, utilizando el predicado `reverse/2` para mostrar la secuencia desde el primer movimiento hasta el último.
+*/
 
 game_history([_,_,_,_,Historial],H):-
-	reverse(Historial,H),
-	write(H).
+	reverse(Historial,H).
 
 %-----------------------------------
+/* 
+Predicado: is_draw/1
+Tipo: Consultor
+Dominio: Juego
+Recorrido: Booleano
+Descripción: Determina si el juego ha terminado en empate. Esto ocurre si no se puede jugar más (tablero lleno) o si ambos jugadores se han quedado sin fichas.
+*/
 
 is_draw([Player1,Player2,Board,_,_]):-
 	not(can_play(Board));
@@ -19,34 +38,15 @@ is_draw([Player1,Player2,Board,_,_]):-
 
 no_tienen_fichas([_,_,_,_,_,_,0]).
 
-%----------------------------------------
-update_stats([[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2, Piezas2],Board,_,_],
-[[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2, Piezas2]],
-[Id1, Name1, Color1, Win1N, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2N, Draws2, Piezas2]):-
-	who_is_winner(Board,Ganador),
-	piece(Color1,Colo1),
-	Colo1 = Ganador, %significa que jugador 1 gano
-	Win1N is Win1 + 1,
-	Losses2N is Losses2 + 1.
-
-update_stats([[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2, Piezas2],Board,_,_],
-[[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2, Piezas2]],
-[Id1, Name1, Color1, Win1, Losses1N, Draws1, Piezas1],[Id2, Name2, Color2, Win2N, Losses2, Draws2, Piezas2]):-
-	who_is_winner(Board,Ganador),
-	piece(Color2,Colo2),
-	Colo2 = Ganador, %significa que jugador 2 gano
-	Win2N is Win2 + 1,
-	Losses1N is Losses1 + 1.
-
-update_stats([[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2, Piezas2],Board,_,_],
-[[Id1, Name1, Color1, Win1, Losses1, Draws1, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2, Piezas2]],
-[Id1, Name1, Color1, Win1, Losses1, Draws1N, Piezas1],[Id2, Name2, Color2, Win2, Losses2, Draws2N, Piezas2]):-
-	who_is_winner(Board,Ganador),
-	Ganador = 0,
-	Draws1N is Draws1 + 1,
-	Draws2N is Draws2 + 1.
-
 %------------------------------------------------------------
+/* 
+Predicado: get_current_player/2
+Tipo: Selector
+Dominio: Juego X JugadorActual
+Recorrido: JugadorActual
+Descripción: Obtiene el jugador cuyo turno está activo, determinando si el número de turno es par o impar.
+*/
+
 get_current_player([Player1,_,_,Turnoactual,_],Player1):-
 	1 is Turnoactual mod 2.
 get_current_player([_,Player2,_,Turnoactual,_],Player2):-
@@ -54,9 +54,24 @@ get_current_player([_,Player2,_,Turnoactual,_],Player2):-
 
 
 %-------------------------------------------------------------
+/* 
+Predicado: game_get_board/2
+Tipo: Selector
+Dominio: Juego X Tablero
+Recorrido: Tablero
+Descripción: Recupera el tablero actual del estado del juego.
+*/
+
 game_get_board([_,_,Board,_,_],Board).
 
 %------------------------------------------------------------
+/* 
+Predicado: end_game/2
+Tipo: Modificador
+Dominio: Juego X NuevoEstado
+Recorrido: NuevoEstado
+Descripción: Finaliza el juego actual, actualizando las estadísticas de los jugadores y mostrando la información resultante.
+*/
 
 end_game([Player1,Player2,Board,Turnoactual,Historial],[P1,P2,Board,Turnoactual,Historial]):-
 	update_stats([Player1,Player2,Board,Turnoactual,Historial],
@@ -65,6 +80,14 @@ end_game([Player1,Player2,Board,Turnoactual,Historial],[P1,P2,Board,Turnoactual,
 	write(P1),nl,
 	write(P2),nl.
 %--------------------------------------------------------------
+/* 
+Predicado: player_play/4
+Tipo: Modificador
+Dominio: Juego X Jugador X Columna X NuevoEstadoJuego
+Recorrido: NuevoEstadoJuego
+Descripción: Realiza un movimiento de un jugador en una columna específica del tablero, actualiza el historial y verifica si hay empate o un ganador tras el movimiento.
+*/
+
 player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2):-
 	corresponde_player(Player1,Player),
 	not(no_tienen_fichas(Player1)),
@@ -132,7 +155,8 @@ player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2
 	(end_game([Player1,NP2,Newboard,Turnoactual,Newhistorial],Newgame2));
 	(game(Player1,NP2,Newboard,Newturno,Newhistorial,Newgame2))),
 	imprimir_tablero(Newboard), nl.
-
+	
+%-------------------------------------------------------------------
 actualizar_historial(Column,Color,Lista,[[Column,Color]|Lista]).
 
 

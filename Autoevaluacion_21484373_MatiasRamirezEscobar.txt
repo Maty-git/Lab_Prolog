@@ -1,0 +1,39 @@
+ESCALA USADA:
+1 = Funcionamiento completo
+0,75 = Funcionamiento parcialmente completo, con algunos errores o mal funcionamiento en algunos casos
+0,5 = Funcionamiento a medias, solo sirve para casos concretos
+0,25 = Solo sirve para un caso
+0 = No hace nada o no esta implementado
+
+
+AutoEvaluacion propia sobre los RF del proyecto:
+
+RF1 TDAs RF1: 0,75
+RF2  TDA Player - constructor RF2: 1
+RF3 TDA Piece - constructor RF3: 1
+RF4 TDA Board - constructor RF4: 1
+RF5 TDA Board - otros - can_play RF5: 1
+RF6 TDA Board - modificador - play_piece RF6: 0,75
+RF7 TDA Board - otros - check_vertical_win RF7: 1
+RF8 TDA Board - otros - check_horizontal_win RF8: 1
+RF9  TDA Board - otros - check_diagonal_win RF9: 1
+RF10 TDA Board - otros - who_is_winner RF10: 1
+RF11 TDA Game - constructor RF11: 0,75
+RF12 TDA Game - otros - game_history RF12: 1
+RF13 TDA Game - otros - is_draw RF13: 0,75
+RF14 TDA Player - otros - update_stats RF14: 1
+RF15 TDA Game - selector - get_current_player RF15:  1
+RF16 TDA Game - selector - game_get_board RF16: 1
+RF17 TDA Game - modificador - end_game RF17: 1
+RF18 TDA Game - modificador - player_play RF18: 1
+
+AutoEvaluacion propia sobre los RNF del proyecto (solo se tomaran en cuenta los que tienen puntos):
+RFN1 - Autoevaluación RNF1: 1
+RFN2 - Lenguaje RFN2: 1
+RFN3 - Versión RFN3: 1
+RFN4 - Standard RFN4: 1
+RNF5 - Documentación RFN5: 0,75
+RNF6 - Organización RFN6: 1
+RNF7 - Historial RFN7: 1
+RNF8 - Script de pruebas: 1
+RNF9 - Prerrequisitos: 1

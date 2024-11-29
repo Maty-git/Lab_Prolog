@@ -1,0 +1,84 @@
+Instrucciones de Uso para Jugar "Conecta4"
+Para comenzar una partida de "Conecta4", sigue estos pasos:
+
+1. Crear Jugadores: Define a los jugadores especificando su color (rojo o amarillo) y otros atributos:
+                      player(1, "Juan", "red", 0, 0, 0, 10, P1)
+	player(2, "Mauricio", "yellow", 0, 0, 0, 10, P2)
+
+Nota: Las piezas se generan automáticamente al iniciar el juego y solo se permite el 
+uso de fichas "red" y "yellow", esto quiere decir que no seria necesario el usar el predicado para crear
+una pieza al inicio del juego ya que al momento de jugar una pieza en el tablero esta se define como la
+primera letra del color correspondiente.
+
+2. Crear el Tablero: Inicia un tablero vacío:
+board(EmptyBoard)
+
+3. Crear una Nueva Partida: Inicia una partida entre dos jugadores:
+game(P1, P2, EmptyBoard, 1, G0)
+
+Luego de estos pasos, los jugadores pueden comenzar a jugar.
+
+4. Jugar en el Tablero: Para colocar una ficha y actualizar el estado del juego:
+player_play(G0, P1, 1, G1),    % Juan juega en columna 1
+Continúa con g1, g2, g3, etc., cada vez que un jugador coloque una ficha.
+
+player_play(G1, P2, 2, G2),    % Mauricio juega en columna 2
+player_play(G2, P1, 2, G3),    % Juan juega en columna 2
+player_play(G3, P2, 3, G4),    % Mauricio juega en columna 3
+player_play(G4, P1, 3, G5),    % Juan juega en columna 3
+player_play(G5, P2, 4, G6),    % Mauricio juega en columna 4
+player_play(G6, P1, 3, G7),    % Juan juega en columna 3
+player_play(G7, P2, 4, G8),    % Mauricio juega en columna 4
+player_play(G8, P1, 4, G9),    % Juan juega en columna 4
+player_play(G9, P2, 1, G10),   % Mauricio juega en columna 1
+player_play(G10, P1, 4, G11),  % Juan juega en columna 4 (victoria diagonal)
+
+
+
+5. Finalización: Al detectar una victoria o empate, la consola mostrará el resultado. 
+El juego se bloqueará automáticamente para evitar más jugadas, y se finalizará la 
+partida mostrando el historial y actualizando las estadísticas de los jugadores.
+
+write('Historial de movimientos: '),nl,
+game_history(G11, History),
+write(History),
+nl,
+
+
+Errores Comunes:
+
+	Solo se aceptan colores "red" y "yellow" para las fichas.
+	Aunque puedes crear múltiples jugadores, solo dos pueden participar en 
+	      una partida a la vez; los demás pueden usarse en otras partidas.
+
+
+Ejemplo Completo de una Partida
+
+% 1. Crear jugadores (10 fichas cada uno para un juego corto)
+player(1, "Juan", "red", 0, 0, 0, 10, P1),
+player(2, "Mauricio", "yellow", 0, 0, 0, 10, P2),
+% 2. Crear fichas
+piece("red", RedPiece),
+piece("yellow", YellowPiece),
+% 3. Crear tablero inicial vac�o
+board(EmptyBoard),
+% 4. Crear nuevo juego
+game(P1, P2, EmptyBoard, 1, G0),
+% 5. Realizando movimientos para crear una victoria diagonal
+player_play(G0, P1, 1, G1),    % Juan juega en columna 1
+player_play(G1, P2, 2, G2),    % Mauricio juega en columna 2
+player_play(G2, P1, 2, G3),    % Juan juega en columna 2
+player_play(G3, P2, 3, G4),    % Mauricio juega en columna 3
+player_play(G4, P1, 3, G5),    % Juan juega en columna 3
+player_play(G5, P2, 4, G6),    % Mauricio juega en columna 4
+player_play(G6, P1, 3, G7),    % Juan juega en columna 3
+player_play(G7, P2, 4, G8),    % Mauricio juega en columna 4
+player_play(G8, P1, 4, G9),    % Juan juega en columna 4
+player_play(G9, P2, 1, G10),   % Mauricio juega en columna 1
+player_play(G10, P1, 4, G11),  % Juan juega en columna 4 (victoria diagonal)
+
+% 6. Mostrar historial de movimientos
+write('Historial de movimientos: '),nl,
+game_history(G11, History),
+write(History),
+nl.
