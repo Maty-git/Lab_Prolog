@@ -18,57 +18,56 @@ main :-
 	% 4. Crear nuevo juego
 	game(P1, P2, EmptyBoard, 1, G0),
 	% 5. Realizando movimientos para crear una victoria diagonal
-	player_play(G0, P1, 3, G1),    % Juan juega en columna 0
-	player_play(G1, P2, 5, G2),    % Mauricio juega en columna 1
-	player_play(G2, P1, 6, G3),    % Juan juega en columna 1
-	player_play(G3, P2, 7, G4),    % Mauricio juega en columna 2
-	player_play(G4, P1, 6, G5),    % Juan juega en columna 2
-	player_play(G5, P2, 5, G6),    % Mauricio juega en columna 3
-	player_play(G6, P1, 6, G7),    % Juan juega en columna 2
-	player_play(G7, P2, 6, G8),    % Mauricio juega en columna 3
-	player_play(G8, P1, 1, G9),    % Juan juega en columna 3
-	player_play(G9, P2, 2, G10),   % Mauricio juega en columna 0
-  % Juan juega en columna 3 (victoria diagonal)
+	player_play(G0, P1, 3, G1),    % Juan juega en columna 3
+	player_play(G1, P2, 5, G2),    % Mauricio juega en columna 5
+	player_play(G2, P1, 6, G3),    % Juan juega en columna 6
+	player_play(G3, P2, 7, G4),    % Mauricio juega en columna 7
+	player_play(G4, P1, 6, G5),    % Juan juega en columna 6
+	player_play(G5, P2, 5, G6),    % Mauricio juega en columna 5
+	player_play(G6, P1, 6, G7),    % Juan juega en columna 6
+	player_play(G7, P2, 6, G8),    % Mauricio juega en columna 6
+	player_play(G8, P1, 1, G9),    % Juan juega en columna 1
+	player_play(G9, P2, 2, G10),   % Mauricio juega en columna 2 (empate)
 
 
 	% 6. Verificaciones del estado del juego
-	write('�Se puede jugar en el tablero vac�o? '),
+	write('Se puede jugar en el tablero vacio? '),
 	can_play(EmptyBoard), % Si se puede seguir jugando, el programa continuar�
 	nl,
 	game_get_board(G10, CurrentBoard),
-	write('�Se puede jugar despu�s de 11 movimientos? '),
+	write('Se puede jugar despues de 10 movimientos? '),
 	can_play(CurrentBoard),
 	nl,
 
-    write('Jugador actual despu�s de 11 movimientos: '),
+    write('Jugador actual despues de 10 movimientos: '),
     get_current_player(G10, CurrentPlayer),
     write(CurrentPlayer),
     nl,
 
 	% 7. Verificaciones de victoria
-	write('Verificaci�n de victoria vertical: '),
+	write('Verificacion de victoria vertical: '),
 	check_vertical_win(CurrentBoard, VerticalWinner),
 	write(VerticalWinner),
 	nl,
 
-	write('Verificaci�n de victoria horizontal: '),
+	write('Verificacion de victoria horizontal: '),
 	check_horizontal_win(CurrentBoard, HorizontalWinner),
 	write(HorizontalWinner),
 	nl,
 
-	write('Verificaci�n de victoria diagonal: '),
+	write('Verificacion de victoria diagonal: '),
 	check_diagonal_win(CurrentBoard, DiagonalWinner),
 	write(DiagonalWinner),
 	nl,
 
-	write('Verificaci�n de ganador: '),
+	write('Verificacion de ganador: '),
 	who_is_winner(CurrentBoard, Winner),
 	write(Winner),
 	nl,
 
 	% 8. Verificaci�n de empate
-	write('�Es empate? '),
-	is_draw(G10),
+	write('Es empate? '),
+	( is_draw(G10) -> writeln('Si es empate');  writeln('No es empate')),
 	nl,
 
 	% 10. Mostrar historial de movimientos

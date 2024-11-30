@@ -32,43 +32,43 @@ main :-
 
 
 	% 6. Verificaciones del estado del juego
-	write('�Se puede jugar en el tablero vac�o? '),
+	write('Se puede jugar en el tablero vacio? '),
 	can_play(EmptyBoard), % Si se puede seguir jugando, el programa continuar�
 	nl,
 	game_get_board(G11, CurrentBoard),
-	write('�Se puede jugar despu�s de 11 movimientos? '),
+	write('Se puede jugar despues de 11 movimientos? '),
 	can_play(CurrentBoard),
 	nl,
 
-    write('Jugador actual despu�s de 11 movimientos: '),
+    write('Jugador actual despues de 11 movimientos: '),
     get_current_player(G11, CurrentPlayer),
     write(CurrentPlayer),
     nl,
 
 	% 7. Verificaciones de victoria
-	write('Verificaci�n de victoria vertical: '),
+	write('Verificacion de victoria vertical: '),
 	check_vertical_win(CurrentBoard, VerticalWinner),
 	write(VerticalWinner),
 	nl,
 
-	write('Verificaci�n de victoria horizontal: '),
+	write('Verificacion de victoria horizontal: '),
 	check_horizontal_win(CurrentBoard, HorizontalWinner),
 	write(HorizontalWinner),
 	nl,
 
-	write('Verificaci�n de victoria diagonal: '),
+	write('Verificacion de victoria diagonal: '),
 	check_diagonal_win(CurrentBoard, DiagonalWinner),
 	write(DiagonalWinner),
 	nl,
 
-	write('Verificaci�n de ganador: '),
+	write('Verificacion de ganador: '),
 	who_is_winner(CurrentBoard, Winner),
 	write(Winner),
 	nl,
 
 	% 8. Verificaci�n de empate
-	write('�Es empate? '),
-	write(is_draw(G11)),
+	write('Es empate? '),
+	(is_draw(G11) -> write(' Si es empate');  write(' No es empate')),
 	nl,
 
 	% 10. Mostrar historial de movimientos

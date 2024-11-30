@@ -11,3 +11,6 @@ _En el script de pruebas se cambiaron algunos apartados ya que el programa reali
 comandos por si solo, ademas de el valor de las columnas porque en el script original empieza 
 desde 0 sin embargo por como esta implementado en este proyecto las columnas van desde 
 1 al 7.
+
+Para ejecutar directamente el script de prueba se deve escribir la consulta:
+main.

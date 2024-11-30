@@ -4,8 +4,10 @@ Predicado: game/5
 Tipo: Constructor
 Dominio: Jugador1 X Jugador2 X Tablero X TurnoActual X Historial X Juego
 Recorrido: Juego
-Descripción: Construye el estado inicial del juego Conecta 4, definiendo jugadores, tablero, turno inicial y un historial vacío o existente de movimientos.
+Tipo de Algoritmo: Ninguno (definición estática)
+Descripción: Construye el estado inicial o un nuevo estado del juego Conecta (4).
 */
+
 
 game(Player1,Player2,Board,Turnoactual,[Player1,Player2,Board,Turnoactual,[]]).
 game(Player1,Player2,Board,Turnoactual,Historial,[Player1,Player2,Board,Turnoactual,Historial]).
@@ -16,8 +18,11 @@ Predicado: game_history/2
 Tipo: Consultor
 Dominio: Juego X Historial
 Recorrido: Historial
-Descripción: Obtiene el historial de movimientos realizados durante el juego en orden inverso, utilizando el predicado `reverse/2` para mostrar la secuencia desde el primer movimiento hasta el último.
+Tipo de Algoritmo: Recursión Natural
+Descripción: Obtiene el historial de movimientos realizados durante el juego en orden inverso,
+usando el predicado `reverse` para mostrar la secuencia desde el primer movimiento hasta el último.
 */
+
 
 game_history([_,_,_,_,Historial],H):-
 	reverse(Historial,H).
@@ -28,8 +33,11 @@ Predicado: is_draw/1
 Tipo: Consultor
 Dominio: Juego
 Recorrido: Booleano
-Descripción: Determina si el juego ha terminado en empate. Esto ocurre si no se puede jugar más (tablero lleno) o si ambos jugadores se han quedado sin fichas.
+Tipo de Algoritmo: Fuerza Bruta
+Descripción: Determina si el juego ha terminado en empate.
+Esto ocurre si no se puede jugar más (tablero lleno) o si ambos jugadores se han quedado sin fichas.
 */
+
 
 is_draw([Player1,Player2,Board,_,_]):-
 	not(can_play(Board));
@@ -44,8 +52,10 @@ Predicado: get_current_player/2
 Tipo: Selector
 Dominio: Juego X JugadorActual
 Recorrido: JugadorActual
-Descripción: Obtiene el jugador cuyo turno está activo, determinando si el número de turno es par o impar.
+Tipo de Algoritmo: Ninguno (evaluación directa)
+Descripción: Obtiene el jugador cuyo turno está activo.
 */
+
 
 get_current_player([Player1,_,_,Turnoactual,_],Player1):-
 	1 is Turnoactual mod 2.
@@ -59,8 +69,10 @@ Predicado: game_get_board/2
 Tipo: Selector
 Dominio: Juego X Tablero
 Recorrido: Tablero
+Tipo de Algoritmo: Ninguno (acceso directo)
 Descripción: Recupera el tablero actual del estado del juego.
 */
+
 
 game_get_board([_,_,Board,_,_],Board).
 
@@ -70,8 +82,12 @@ Predicado: end_game/2
 Tipo: Modificador
 Dominio: Juego X NuevoEstado
 Recorrido: NuevoEstado
-Descripción: Finaliza el juego actual, actualizando las estadísticas de los jugadores y mostrando la información resultante.
+Tipo de Algoritmo: Ninguno (evaluación secuencial)
+Descripción: Finaliza el juego actual, 
+actualizando las estadísticas de los jugadores con el predicado `update_stats` 
+y mostrando la información de los jugadores.
 */
+
 
 end_game([Player1,Player2,Board,Turnoactual,Historial],[P1,P2,Board,Turnoactual,Historial]):-
 	update_stats([Player1,Player2,Board,Turnoactual,Historial],
@@ -85,9 +101,12 @@ Predicado: player_play/4
 Tipo: Modificador
 Dominio: Juego X Jugador X Columna X NuevoEstadoJuego
 Recorrido: NuevoEstadoJuego
-Descripción: Realiza un movimiento de un jugador en una columna específica del tablero, actualiza el historial y verifica si hay empate o un ganador tras el movimiento.
+Tipo de Algoritmo: Backtracking
+Descripción: Realiza un movimiento de un jugador en una columna específica del tablero,
+actualiza el historial, verifica si hay empate o un ganador, y actualiza el estado del juego.
+Utiliza backtracking.
 */
-
+%caso de si juega el player 1 y resulta en empate
 player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2):-
 	corresponde_player(Player1,Player),
 	not(no_tienen_fichas(Player1)),
@@ -103,7 +122,7 @@ player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2
 	is_draw(Newgame),
 	end_game(Newgame,Newgame2),
 	imprimir_tablero(Newboard), nl.
-
+%caso de si juega el player 2 y resulta en empate
 player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2):-
 	corresponde_player(Player2,Player),
 	not(no_tienen_fichas(Player2)),
@@ -119,7 +138,7 @@ player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2
 	is_draw(Newgame),
 	end_game(Newgame,Newgame2),
 	imprimir_tablero(Newboard), nl.
-
+%caso de si juega el player 1 y revisa si alguien gana o si aun se puede jugar
 player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2):-
 	corresponde_player(Player1,Player),
 	not(no_tienen_fichas(Player1)),
@@ -137,7 +156,7 @@ player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2
 	(end_game([NP1,Player2,Newboard,Turnoactual,Newhistorial],Newgame2));
 	(game(NP1,Player2,Newboard,Newturno,Newhistorial,Newgame2))),
 	imprimir_tablero(Newboard), nl.
-
+%caso de si juega el player 2 y revisa si alguien gana o si aun se puede jugar
 player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2):-
 	corresponde_player(Player2,Player),
 	not(no_tienen_fichas(Player2)),
@@ -157,6 +176,8 @@ player_play([Player1,Player2,Board,Turnoactual,Historial],Player,Column,Newgame2
 	imprimir_tablero(Newboard), nl.
 	
 %-------------------------------------------------------------------
+%Predicados auxiliares para poder tener una lógica más entendible al ejecutarlo.
+
 actualizar_historial(Column,Color,Lista,[[Column,Color]|Lista]).
 
 

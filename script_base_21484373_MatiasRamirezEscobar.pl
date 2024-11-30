@@ -32,11 +32,11 @@ main :-
 
 
 	% 6. Verificaciones del estado del juego
-	write('Se puede jugar en el tablero vac�o? '),
-	can_play(EmptyBoard), % Si se puede seguir jugando, el programa continuar�
+	write('Se puede jugar en el tablero vacio? '),
+	can_play(EmptyBoard), % Si se puede seguir jugando, el programa continuara
 	nl,
 	game_get_board(G11, CurrentBoard),
-	write('Se puede jugar despu�s de 11 movimientos? '),
+	write('Se puede jugar despues de 11 movimientos? '),
 	can_play(CurrentBoard),
 	nl,
 
@@ -67,8 +67,8 @@ main :-
 	nl,
 
 	% 8. Verificaci�n de empate
-	write('�Es empate? '),
-	write(is_draw(G11)),
+	write('Es empate?'),
+	(is_draw(G11) -> write(' Si es empate');  write(' No es empate')),
 	nl,
 
 	% 10. Mostrar historial de movimientos

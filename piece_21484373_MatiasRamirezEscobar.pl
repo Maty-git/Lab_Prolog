@@ -3,8 +3,11 @@ Predicado: piece/2
 Tipo: Constructor
 Dominio: Color (String) X Ficha (Carácter)
 Recorrido: Ficha
-Descripción: Genera una ficha a partir del color especificado, representando la ficha como el primer carácter del color. Utiliza predicados auxiliares para descomponer el string y extraer su primer carácter.
+Tipo de Algoritmo: Ninguno (evaluación directa con predicados auxiliares)
+Descripción: Genera una ficha a partir del color especificado, 
+representando la ficha como el primer carácter del color.
 */
+
 
 piece(Color,C):-
     descomponer_string(Color,ListaColor),

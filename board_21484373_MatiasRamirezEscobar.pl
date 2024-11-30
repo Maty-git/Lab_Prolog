@@ -1,9 +1,12 @@
 /* 
 Predicado: board/1
 Tipo: Constructor
-Dominio: Lista de Listas
-Recorrido: Lista de Listas
-Descripción: Este predicado construye el tablero inicial de Conecta 4 como una lista de listas, donde cada posición está inicializada con el valor 0, representando una casilla vacía.
+Dominio: Variable (nada) 
+Recorrido: Lista de Listas de 0
+Tipo de Algoritmo: Ninguno (predicado básico)
+Descripción: Este predicado construye el tablero inicial de Conecta 4 
+como una lista de listas, donde cada posición tiene valor 0, 
+representando una casilla vacía.
 */
 
 board([[0,0,0,0,0,0,0],
@@ -16,9 +19,12 @@ board([[0,0,0,0,0,0,0],
 /* 
 Predicado: can_play/1
 Tipo: Consultor
-Dominio: Tablero (Lista de Listas)
+Dominio: Board
 Recorrido: Booleano
-Descripción: Este predicado verifica si aún se puede jugar en el tablero, comprobando la existencia de al menos una casilla vacía (valor 0) en cualquier fila.
+Tipo de Algoritmo: Fuerza Bruta
+Descripción: Este predicado verifica si aún se puede jugar en el tablero,
+comprobando la existencia de al menos un lugar vacio en cualquier fila.
+Utiliza fuerza bruta para recorrer cada fila del tablero hasta encontrar un cero.
 */
 
 can_play(Tablero) :-
@@ -31,14 +37,18 @@ can_play(Tablero) :-
 Predicado: play_piece/4
 Tipo: Modificador
 Dominio: Tablero X Columna X Ficha X NuevoTablero
-Recorrido: NuevoTablero (Lista de Listas)
-Descripción: Este predicado coloca una ficha en la columna indicada, actualizando el tablero de acuerdo con las reglas del juego. Se utiliza recursión y auxiliares para identificar la posición disponible más baja.
+Recorrido: NuevoTablero 
+Tipo de Algoritmo: Fuerza Bruta y recursivo
+Descripción: Este predicado coloca una ficha en la columna indicada,
+actualizando el tablero de acuerdo con las reglas del juego. 
+Usa fuerza bruta y auxiliares recursivos para encontrar la posición 
+más baja donde se puede poner una ficha.
 */
 
 play_piece(Board, Columna, Pieza, NuevoBoard) :-
-    reverse(Board, RevBoard), % Invertimos el tablero para colocar la ficha desde la última posición hacia arriba
-    poner_ficha_fila(RevBoard, Columna, Pieza, NuevoRevBoard), % Colocamos la ficha en el tablero invertido
-    reverse(NuevoRevBoard, NuevoBoard). % Volvemos a invertir el tablero para obtener el tablero actualizado
+    reverse(Board, RevBoard), 
+    poner_ficha_fila(RevBoard, Columna, Pieza, NuevoRevBoard), 
+    reverse(NuevoRevBoard, NuevoBoard). 
 
 % Función auxiliar para colocar la ficha en la columna especificada
 poner_ficha_fila([Fila|Resto], Columna, Pieza, [NuevaFila|Resto]) :-
@@ -48,8 +58,8 @@ poner_ficha_fila([Fila|Resto], Columna, Pieza, [Fila|NuevoResto]) :-
     poner_ficha_fila(Resto, Columna, Pieza, NuevoResto).
 
 % Función auxiliar para reemplazar un elemento en una lista
-poner_la_ficha([_|Resto], 1, Pieza, [Pieza|Resto]). % Caso base: si la columna es 1
-poner_la_ficha([Elem|Resto], Columna, Pieza, [Elem|NuevoResto]) :- % Caso recursivo: debe llegar a la posición
+poner_la_ficha([_|Resto], 1, Pieza, [Pieza|Resto]). 
+poner_la_ficha([Elem|Resto], Columna, Pieza, [Elem|NuevoResto]) :- 
     ColumnaAux is Columna - 1,
     poner_la_ficha(Resto, ColumnaAux, Pieza, NuevoResto).
 
@@ -66,7 +76,9 @@ Predicado: check_vertical_win/2
 Tipo: Consultor
 Dominio: Tablero X FichaGanadora
 Recorrido: FichaGanadora
-Descripción: Verifica si existe una victoria vertical en el tablero para una ficha específica. Recorre las columnas comprobando secuencias consecutivas de la misma ficha.
+Tipo de Algoritmo: Backtracking
+Descripción: Verifica si existe una victoria vertical en el tablero para una ficha específica.
+Recorre las columnas utilizando backtracking para encontrar una secuencia de cuatro fichas consecutivas.
 */
 
 check_vertical_win(Board, Winner) :-
@@ -109,8 +121,11 @@ Predicado: check_horizontal_win/2
 Tipo: Consultor
 Dominio: Tablero X FichaGanadora
 Recorrido: FichaGanadora
-Descripción: Verifica si existe una victoria horizontal en el tablero para una ficha específica. Recorre las filas y evalúa secuencias consecutivas.
+Tipo de Algoritmo: Backtracking
+Descripción: Verifica si existe una victoria horizontal en el tablero para una ficha específica.
+Recorre las filas del tablero y utiliza backtracking para encontrar una secuencia de cuatro fichas consecutivas.
 */
+
 
 check_horizontal_win(Board,Winner):-
 	horizontal_win_1(1,Board,1,r,Winner);
@@ -154,8 +169,11 @@ Predicado: check_diagonal_win/2
 Tipo: Consultor
 Dominio: Tablero X FichaGanadora
 Recorrido: FichaGanadora
-Descripción: Verifica si existe una victoria diagonal en el tablero para una ficha específica. Evalúa tanto diagonales ascendentes como descendentes.
+Tipo de Algoritmo: Backtracking
+Descripción: Verifica si existe una victoria diagonal en el tablero para una ficha específica. 
+Evalúa tanto diagonales ascendentes como descendentes utilizando backtracking.
 */
+
 
 check_diagonal_win(Board,Winner):-
 	diagonal_win_1(1,Board,1,r,Winner);
@@ -228,8 +246,11 @@ Predicado: who_is_winner/2
 Tipo: Consultor
 Dominio: Tablero X Ganador
 Recorrido: Ganador
-Descripción: Este predicado evalúa si existe un ganador en el tablero. Comprueba las condiciones de victoria vertical, horizontal y diagonal mediante los predicados auxiliares `check_vertical_win/2`, `check_horizontal_win/2` y `check_diagonal_win/2`. Si no hay ganador, asigna un valor de 0 al ganador (empate o juego en progreso).
+Tipo de Algoritmo: Backtracking
+Descripción: Este predicado evalúa si existe un ganador en el tablero.
+Comprueba las condiciones de victoria vertical, horizontal y diagonal.
 */
+
 
 who_is_winner(Board,Winner):-
 	check_vertical_win(Board,Winner),
@@ -248,7 +269,7 @@ who_is_winner(_,0).
 	
 
 %--------------------------------------------
-%Predicados auxiliares para poder ver el tablero mas lindo al ejecutarlo 
+%Predicados auxiliares para poder ver el tablero mas entendible al ejecutarlo 
 
 imprimir_tablero([]).  
 
